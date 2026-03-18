@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="widht=device-widh, initial-scal=1.0">
+	<title>ICHIBOT Financial Report</title>
+
+	<style>
+		*{
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+		}
+
+		body {
+			font-family: sans-serif;
+			background-color: #f5f5f3;
+			color: #1a1a18;
+			padding: 24px;
+		}
+
+		#header {
+			margin-bottom: 24px;
+		}
+
+		#header h1 {
+			font-size: 20px;
+			font-weight: 600;
+		}
+
+		#header p {
+			font-size: 13px;
+			color: #888;
+			margin-top: 4px;
+		}
+
+		#navigasi {
+			display: flex;
+			gap: 8px;
+			margin-bottom: 24px;
+		}
+
+		#navigasi button {
+			padding: 8px 14px;
+			border: 1px solid #ccc;
+			border-radius: 8px;
+			background-color: #fff;
+			font-size: 13px;
+			cursor: pointer;
+		}
+
+		#navigasi button:hover {
+			background-color: #e8e8e8;
+		}
+
+		#navigasi button.aktif {
+			background-color: #0F6E56;
+			color: #fff ;
+			border-color: #0F6E56 ;
+		}
+
+		#konten {
+			background-color: #fff ;
+			border: 1px solid #e0e0e0;
+			border-radius: 12px;
+			padding: 24px;
+		}
+
+		.section {
+			display: none;
+		}
+
+		.section.aktif {
+			display: block;
+		}
+
+	</style>
+
+</head>
+
+<body>
+	<div id="header">	
+	<h1>ICHIBOT Financial Report</h1>
+	<p>Sistem Pencatatan Keuangan ICHIBOT</p>
+</div>
+
+<div id="navigasi">
+	<button onclick="bukaTab('input')">Input Data</button>
+	<button onclick="bukaTab('transaksi')">Daftar Transaksi</button>
+	<button onclick="bukaTab('preview')">Preview Laporan</button>
+	<button onclick="bukaTab('download')">Download PDF</button>
+</div>
+
+<div id="konten">
+
+	<div id="section-input" class="section">
+
+		<h2 style="margin-bottom: 16px;">Input Data<h2>
+
+		<div style="margin-bottom; 24px;">
+			<label for="jenis-form">Pilih jenis transaksi;</label>
+			<select id="jenis-form" onchange="gantiForm()" style="margin-left: 8px; padding: 8px 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; cursor: pointer;">
+				<option value="pendapatan-ppn">Pendapatan dengan PPn</option>
+				<option value="pendapatan-simple">Pendapatan tanpa PPn</option>
+				<option value="pengeluaran-ppn">Pengeluaran dengan PPn</option>
+				<option value="pengeluaran-simple">Pengeluaran tanpa PPn</option>
+			</select>
+		</div>
+
+		<div id="form-pendapatan-ppn">
+			<p>Form pendapatan dengan PPn akan dibuat di sini</p>
+		</div>
+
+		<div id="form-pendapatan-simple">
+			<div style="margin-bottom: 16px;">
+				<label style="display:block; font-size:13px; margin-bottom: 4px;">Tanggal</label>
+				<input type="date" id="ppn-tanggal">
+			</div>
+
+			<div style="margin-bottom:16px;">
+				<label style="display:block; font-size:13px; margin-bottom: 4px;">No. Faktur/Ref</label>
+				<input type="text" id="ppn-faktur" placeholder="Contoh: ICH-INV-001">
+			</div>
+
+			<div style="margin-bottom:16px;">
+				<label style="display:block; font-size:13px; margin-bottom: 4px;">Nama Klien</label>
+				<input type="text" id="ppn-klien" placeholder="Contoh: PT. Cakrawana Adhi Perkasa">
+			</div>
+
+			<div style="margin-bottom: 16px;">
+				<label style="display:block; font-size:13px; margin-bottom: 4px;">Deskripsi Pemasukan</label>
+				<input type="text" id="ppn-deskripsi-pemasukkan" placeholder="Contoh: Pembayaran Jasa Konstruksi Elektrikal Security System">
+			</div>
+
+			<div style="margin-bottom:16px;">
+				<label style="display:block; font-size:13px; margin-bottom: 4px;">"Jumlah (DPP)"</label>
+				<input type="number" id="ppn-jumlah" placeholder="0" oninput="hitungPPN()"> 
+			</div>
+
+			<div style="margin-bottom:16px;">
+				<label style="display:block; font-size:13px; margin-bottom: 4px;">PPN (%)</label>
+				<select id="ppn-persen" onchange="hitungPPN()">
+					<option value="0">0%</option>
+					<option value="11">11%</option>
+					<option value="12">12%</option>
+				</select>
+			</div>
+
+			<div style="background:#fffff; border-radius: 8px; padding: 12px; margin-bottom:16px; font-size:13px;">
+				<span>Nilai PPN:</span>
+				<span id="hasil-ppn">Rp 0</span>
+			</div>
+			<div style="display:flex; justify-content:space-between; font-weight: 600;">
+				<span>Total:</span>
+				<span id="hasil-total">Rp 0</span>
+			</div>
+
+		</div>
+
+		<button onclick="simpanData()">Simpan</button>
+
+	</div>
+
+		<div id="form-pengeluaran-ppn">
+			<p>Form pengeluaran dengan PPn akan dibuat di sini</p>
+		</div>
+
+		<div id="form-pengeluaran-simple">
+			<p>Form pengeluaran tanpa PPn akan dibuat di sini</p>
+		</div>
+
+	</div>
+
+	<div id="section-transaksi" class="section">
+		<h2>Daftar Transaksi</h2>
+		<p>Tabel transaksi akan ditampilkan di sini. </p>
+	</div>
+
+	<div id="section-preview" class="section">
+		<h2>Preview Laporan</h2>
+		<p>Laporan keuangan akan ditampilkan di sini.</p>
+	</div>
+
+	<div id="section-download" class="section">
+		<h2>Download PDF</h2>
+		<p>Fitur download akan dibuat di sini.</p>
+	</div>
+
+</div>
+
+	<script>
+		function bukaTab(namTab) {
+			var semuaSection = document.querySelectorAll('.section');
+			for (var i = 0; i < semuaSection.length; i++) {
+				semuaSection[i].classList.remove('aktif');
+			}
+
+			var semuaTombol = document.querySelectorAll('#navigasi button'); 
+			for (var i=0; i <semuaTombol.length; i++){
+				semuaTombol[i].classList.remove('aktif')
+			}
+
+			document.getElementById('section-' + namTab).classList.add('aktif');
+
+			event.target.classList.add('aktif')
+		}
+
+		function gantiForm() {
+			var pilihan = document.getElementById('jenis-form').value;
+
+			document.getElementById('form-pendapatan-ppn').style.display = 'none';
+			document.getElementById('form-pendapatan-simple').style.display = 'none';
+			document.getElementById('form-pengeluaran-ppn').style.display = 'none';
+			document.getElementById('form-pengeluaran-simple').style.display = 'none';
+
+			document.getElementById('form-' + pilihan).style.display = 'block';
+
+
+		}
+
+		function hitungPPN() {
+			var jumlah = parseFloat(document.getElementById('ppn-jumlah').value) || 0;
+			var persen = parseFloat(document.getElementById('ppn-persen').value) || 0;
+
+			var nilaiPPN = jumlah * persen / 100;
+			var total = jumlah + nilaiPPN
+
+			document.getElementById('hasil-ppn').textContent = 'Rp ' + nilaiPPN.toLocaleString('id-ID');
+			document.getElementById('hasil-total').textContent = 'Rp ' + total.toLocaleString('id-ID')
+		}
+
+		function simpanData() {
+			var jumlah = parseFloat(document.getElementById('ppn-jumlah').value) || 0;
+			if (jumlah <= 0) {
+				alert('Jumlah harus diisi!')
+				return;
+			}
+
+			alert('Data berhasil disimpan! (Sementara)')
+
+		}
+		document.querySelector('#navigasi button').click();
+	</script>
+
+
+</body>
+
+</html>
