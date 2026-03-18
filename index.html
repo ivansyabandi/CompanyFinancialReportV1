@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="widht=device-widh, initial-scal=1.0">
+	<meta name="viewport" content="widht=device-width, initial-scale=1.0">
 	<title>ICHIBOT Financial Report</title>
 
 	<style>
@@ -96,9 +96,9 @@
 
 	<div id="section-input" class="section">
 
-		<h2 style="margin-bottom: 16px;">Input Data<h2>
+		<h2 style="margin-bottom: 16px;">Input Data</h2>
 
-		<div style="margin-bottom; 24px;">
+		<div style="margin-bottom: 24px;">
 			<label for="jenis-form">Pilih jenis transaksi;</label>
 			<select id="jenis-form" onchange="gantiForm()" style="margin-left: 8px; padding: 8px 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; cursor: pointer;">
 				<option value="pendapatan-ppn">Pendapatan dengan PPn</option>
@@ -109,10 +109,6 @@
 		</div>
 
 		<div id="form-pendapatan-ppn">
-			<p>Form pendapatan dengan PPn akan dibuat di sini</p>
-		</div>
-
-		<div id="form-pendapatan-simple">
 			<div style="margin-bottom: 16px;">
 				<label style="display:block; font-size:13px; margin-bottom: 4px;">Tanggal</label>
 				<input type="date" id="ppn-tanggal">
@@ -133,6 +129,18 @@
 				<input type="text" id="ppn-deskripsi-pemasukkan" placeholder="Contoh: Pembayaran Jasa Konstruksi Elektrikal Security System">
 			</div>
 
+			<div style="margin-bottom: 16px;">
+      			<label style="display:block; font-size:13px; margin-bottom:4px;">Akun Pendapatan</label>
+      			<select id="ppn-akun" style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; width: 100%;">
+			        <option value="">-- Pilih akun --</option>
+			        <option value="marketplace">Marketplace Ichibot Store</option>
+			        <option value="project">Project</option>
+			        <option value="produk-robotik">Produk Robotik</option>
+			        <option value="produk-iot-ai">Produk IoT dan AI</option>
+			        <option value="pelatihan">Pelatihan</option>
+      			</select>
+    		</div>
+
 			<div style="margin-bottom:16px;">
 				<label style="display:block; font-size:13px; margin-bottom: 4px;">"Jumlah (DPP)"</label>
 				<input type="number" id="ppn-jumlah" placeholder="0" oninput="hitungPPN()"> 
@@ -147,7 +155,7 @@
 				</select>
 			</div>
 
-			<div style="background:#fffff; border-radius: 8px; padding: 12px; margin-bottom:16px; font-size:13px;">
+			<div style="background:#ffffff; border-radius: 8px; padding: 12px; margin-bottom:16px; font-size:13px;">
 				<span>Nilai PPN:</span>
 				<span id="hasil-ppn">Rp 0</span>
 			</div>
@@ -156,26 +164,274 @@
 				<span id="hasil-total">Rp 0</span>
 			</div>
 
+			<button onclick="simpanDataPemPPn()">Simpan</button>
+
 		</div>
 
-		<button onclick="simpanData()">Simpan</button>
 
-	</div>
+		<div id="form-pendapatan-simple">
+			<div style="margin-bottom: 16px;">
+				<label style="display:block; font-size:13px; margin-bottom: 4px;">Tanggal</label>
+				<input type="date" id="simple-tanggal">
+			</div>
+
+			<div style="margin-bottom:16px;">
+				<label style="display:block; font-size:13px; margin-bottom: 4px;">No. Faktur/Ref</label>
+				<input type="text" id="simple-faktur" placeholder="Contoh: ICH-INV-001">
+			</div>
+
+			<div style="margin-bottom:16px;">
+				<label style="display:block; font-size:13px; margin-bottom: 4px;">Nama Klien</label>
+				<input type="text" id="simple-klien" placeholder="SMK Muhammadiyah 1 Yogyakarta">
+			</div>
+
+			<div style="margin-bottom: 16px;">
+				<label style="display:block; font-size:13px; margin-bottom: 4px;">Deskripsi Pemasukan</label>
+				<input type="text" id="simple-deskripsi-pemasukkan" placeholder="Contoh: Pembayaran Jasa Konstruksi Elektrikal Security System">
+			</div>
+
+			<div style="margin-bottom: 16px;">
+      			<label style="display:block; font-size:13px; margin-bottom:4px;">Akun Pendapatan</label>
+      			<select id="ppn-akun" style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; width: 100%;">
+			        <option value="">-- Pilih akun --</option>
+			        <option value="pelatihan">Pelatihan</option>
+			        <option value="investasi">Investasi</option>
+			        <option value="hibah">Hibah</option>
+			        <option value="Partnership/Sponsor">Partnership/Sponsor</option>
+      			</select>
+    		</div>
+
+			<div style="margin-bottom:16px;">
+				<label style="display:block; font-size:13px; margin-bottom: 4px;">Jumlah Pendapatan</label>
+				<input type="number" id="jumlah-pendapatan" placeholder="0" oninput="hitungPemasukkan()"> 
+			</div>
+
+			<div style="display:flex; justify-content:space-between; font-weight: 100;">
+				<span>Total:</span>
+				<span id="pendapatan">Rp 0</span>
+			</div>
+
+			<button onclick="simpanDataPem()">Simpan</button>
+
+		</div>
 
 		<div id="form-pengeluaran-ppn">
-			<p>Form pengeluaran dengan PPn akan dibuat di sini</p>
+
+		    <div style="margin-bottom: 16px;">
+		        <label style="display:block; font-size:13px; margin-bottom: 4px;">Tanggal</label>
+		        <input type="date" id="keluar-ppn-tanggal">
+		    </div>
+
+		    <div style="margin-bottom: 16px;">
+		        <label style="display:block; font-size:13px; margin-bottom: 4px;">Kategori Akun</label>
+		        <select id="keluar-ppn-kategori" style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; width: 100%;">
+		            <option value="">-- Pilih kategori --</option>
+		            <option value="alat-produksi">Alat Produksi</option>
+		            <option value="bahan-baku">Bahan Baku Produksi</option>
+		            <option value="bangunan">Bangunan</option>
+		            <option value="gaji-insentif">Biaya Gaji dan Insentif</option>
+		            <option value="biaya-kirim">Biaya Kirim/Pengiriman</option>
+		            <option value="pemeliharaan">Biaya Pemeliharaan Alat & Mesin Kantor</option>
+		            <option value="cash-custody">Cash Custody Log</option>
+		            <option value="employee-welfare">Employee Welfare</option>
+		            <option value="internet">Internet</option>
+		            <option value="jamsostek">Jaminan Sosial</option>
+		            <option value="kebutuhan-habis-pakai">Kebutuhan Kantor Habis Pakai</option>
+		            <option value="kebutuhan-peralatan">Kebutuhan Kantor Peralatan</option>
+		            <option value="kebutuhan-project">Kebutuhan Project</option>
+		            <option value="kebutuhan-riset">Kebutuhan Riset</option>
+		            <option value="konsumsi">Konsumsi Kantor</option>
+		            <option value="laundry">Laundry</option>
+		            <option value="listrik">Listrik</option>
+		            <option value="part-ichibot-store">Part untuk ICHIBOT Store</option>
+		            <option value="transport">Transport</option>
+		        </select>
+		    </div>
+
+		    <div style="margin-bottom: 16px;">
+		        <label style="display:block; font-size:13px; margin-bottom: 4px;">Nama Pengeluaran</label>
+		        <input type="text" id="keluar-ppn-nama" placeholder="Contoh: Pembelian Kabel UTP Cat6">
+		    </div>
+
+		    <div style="margin-bottom: 16px;">
+		        <label style="display:block; font-size:13px; margin-bottom: 4px;">Jumlah (Rp)</label>
+		        <input type="number" id="keluar-ppn-jumlah" placeholder="0" oninput="hitungPengeluaranPPN()">
+		    </div>
+
+		    <div style="margin-bottom: 16px;">
+		        <label style="display:block; font-size:13px; margin-bottom: 4px;">PPN (%)</label>
+		        <select id="keluar-ppn-persen" onchange="hitungPengeluaranPPN()">
+		            <option value="0">0%</option>
+		            <option value="11">11%</option>
+		            <option value="12">12%</option>
+		        </select>
+		    </div>
+
+		    <div style="background:#f5f5f3; border-radius: 8px; padding: 12px; margin-bottom: 16px; font-size: 13px; display:flex; justify-content:space-between;">
+		        <span>Harga PPN:</span>
+		        <span id="keluar-ppn-nilai">Rp 0</span>
+		    </div>
+
+		    <div style="display:flex; justify-content:space-between; font-weight: 600; margin-bottom: 16px;">
+		        <span>Neto Pengeluaran (Jumlah - PPN):</span>
+		        <span id="keluar-ppn-neto">Rp 0</span>
+		    </div>
+
+		    <div style="margin-bottom: 16px;">
+		        <label style="display:block; font-size:13px; margin-bottom: 4px;">Bukti Foto</label>
+		        <input type="file" id="keluar-ppn-foto" accept="image/*" onchange="previewFoto('keluar-ppn-foto', 'foto-preview-ppn')">
+		       
+		        <img id="foto-preview-ppn" style="display:none; margin-top:8px; max-width:200px; border-radius:8px; border:1px solid #ccc;">
+		    </div>
+
+		    <button onclick="simpanPengeluaranPPN()">Simpan</button>
+
 		</div>
 
+
 		<div id="form-pengeluaran-simple">
-			<p>Form pengeluaran tanpa PPn akan dibuat di sini</p>
+
+
+		    <div style="margin-bottom: 16px;">
+		        <label style="display:block; font-size:13px; margin-bottom: 4px;">Tanggal</label>
+		        <input type="date" id="keluar-simple-tanggal">
+		    </div>
+
+		    <div style="margin-bottom: 16px;">
+		        <label style="display:block; font-size:13px; margin-bottom: 4px;">Kategori Akun</label>
+		        <select id="keluar-simple-kategori" style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; width: 100%;">
+		            <option value="">-- Pilih kategori --</option>
+		            <option value="alat-produksi">Alat Produksi</option>
+		            <option value="bahan-baku">Bahan Baku Produksi</option>
+		            <option value="bangunan">Bangunan</option>
+		            <option value="gaji-insentif">Biaya Gaji dan Insentif</option>
+		            <option value="biaya-kirim">Biaya Kirim/Pengiriman</option>
+		            <option value="pemeliharaan">Biaya Pemeliharaan Alat & Mesin Kantor</option>
+		            <option value="cash-custody">Cash Custody Log</option>
+		            <option value="employee-welfare">Employee Welfare</option>
+		            <option value="internet">Internet</option>
+		            <option value="jamsostek">Jaminan Sosial</option>
+		            <option value="kebutuhan-habis-pakai">Kebutuhan Kantor Habis Pakai</option>
+		            <option value="kebutuhan-peralatan">Kebutuhan Kantor Peralatan</option>
+		            <option value="kebutuhan-project">Kebutuhan Project</option>
+		            <option value="kebutuhan-riset">Kebutuhan Riset</option>
+		            <option value="konsumsi">Konsumsi Kantor</option>
+		            <option value="laundry">Laundry</option>
+		            <option value="listrik">Listrik</option>
+		            <option value="part-ichibot-store">Part untuk ICHIBOT Store</option>
+		            <option value="transport">Transport</option>
+		        </select>
+		    </div>
+
+		    <div style="margin-bottom: 16px;">
+		        <label style="display:block; font-size:13px; margin-bottom: 4px;">Nama Pengeluaran</label>
+		        <input type="text" id="keluar-simple-nama" placeholder="Contoh: Konsumsi Rapat Bulanan">
+		    </div>
+
+		    <div style="margin-bottom: 16px;">
+		        <label style="display:block; font-size:13px; margin-bottom: 4px;">Jumlah (Rp)</label>
+		        <input type="number" id="keluar-simple-jumlah" placeholder="0" oninput="hitungPengeluaranSimple()">
+		    </div>
+
+		    <div style="display:flex; justify-content:space-between; font-weight: 600; margin-bottom: 16px;">
+		        <span>Total Pengeluaran:</span>
+		        <span id="keluar-simple-total">Rp 0</span>
+		    </div>
+
+		    <div style="margin-bottom: 16px;">
+		        <label style="display:block; font-size:13px; margin-bottom: 4px;">Bukti Foto</label>
+		        <input type="file" id="keluar-simple-foto" accept="image/*" onchange="previewFoto('keluar-simple-foto', 'foto-preview-simple')">
+		        <img id="foto-preview-simple" style="display:none; margin-top:8px; max-width:200px; border-radius:8px; border:1px solid #ccc;">
+		    </div>
+
+		    <button onclick="simpanPengeluaranSimple()">Simpan</button>
+
 		</div>
 
 	</div>
 
 	<div id="section-transaksi" class="section">
-		<h2>Daftar Transaksi</h2>
-		<p>Tabel transaksi akan ditampilkan di sini. </p>
+		<h2 style="margin-bottom: 16px;">Daftar Transaksi</h2>
+
+		<div id="filter-jenis" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom:16px ;">
+		</div>
+
+		<div style="display:flex;gap: 12px;flex-wrap: wrap; margin-bottom: 20px; align-items: center;">
+
+			<label style="font-size: 12px; display: block; margin-bottom:4px;color:#888;">Hari</label>
+			<select id="filter-hari" onchange="terapkanFilter()" 
+			style="padding: 6px 10px; border: 1px solid #ccc; border-radius:8px	; font-size:13px; ">
+			<option value="">Semua Hari</option>
+				
+			</select>
+		</div>
+
+		<div>
+			<label style="font-size: 12px; display: block; margin-bottom:4px;color:#888;">Bulan</label>
+			<select id="filter-bulan" onchange="terapkanFilter()"
+			style="padding:6px; border: 1px solid #ccc;border-radius: 8px; font-size: 13px; ">
+				<option value="">Semua</option>
+				<option value="1">Januari</option>
+				<option value="2">Februari</option>
+				<option value="3">Maret</option>
+				<option value="4">April</option>
+				<option value="5">Mei</option>
+				<option value="6">Juni</option>
+				<option value="7">Juli</option>
+				<option value="8">Agustus</option>
+				<option value="9">September</option>
+				<option value="10">Oktober</option>
+				<option value="11">November</option>
+				<option value="12">Desember</option>
+			</select>
+		</div>
+
+		<div>
+			<label style="font-size:12px; display: block; margin-bottom:4px; color:#888 ;">Tahun</label>
+			<select id="filter-tahun" onchange="terapkanFilter()"
+			style="padding: 6px 10px; border: 1px solid #ccc;border-radius: 8px; font-size:13px ; ">
+			<option value="">Semua</option>
+			</select>
+
+		</div>
+
+		<div style="aligh-self:flex-end">
+			<button onclick="resetFilter()"
+			style="padding:6px; border: 1px solid #ccc;	border-radius: 8px; font-size: 13px; cursor: pointer; background: #fff;">
+				Reset Filter
+			</button>
+		</div>
+
+
+		<div style="overflow-x: auto;">
+			<table id="tabel-transaksi"
+			style="width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; ">
+			<thead>
+				<tr style="background: #f5f5f3; text-align: left;">
+					<th style="padding: 10px; border-bottom: 1px solid #e0e0e0; width: 90px;">Tanggal</th>
+					<th style="padding: 10px; border-bottom:1px solid #e0e0e0; width:140px ;">Jenis</th>
+					<th style="padding: 10px; border-bottom: 1px solid #e0e0e0: ;">Keterangan</th>
+					<th style="padding: 10px; border-bottom: 1px solid #e0e0e0; width:120px; text-align:right ;">Jumlah</th>
+				</tr>
+
+			</thead>
+			<tbody id="isi-tabel">
+			</tbody>
+			</table>
+			
+		</div>
+
+		<div id="pesan-kosong"
+			style="display: none; text-align: center;	padding: 40px;color: #888; font-size: 13px; ">
+			Tidak ada transaksi yang ditemukan.
+		</div>
+
+		<div id="pagination" 
+		style="display:flex; gap: 6px; justify-content: center;	margin-top: 20px; flex-wrap:wrap ;">
+		</div>
+
 	</div>
+
 
 	<div id="section-preview" class="section">
 		<h2>Preview Laporan</h2>
@@ -190,6 +446,289 @@
 </div>
 
 	<script>
+
+		var dataTransaksi = [
+					{
+			        tanggal: '2026-03-01',      
+			        jenis: 'pendapatan-ppn',    
+			        keterangan: 'PT. Cakrawana — Jasa Security System',
+			        jumlah: 5000000
+			    },
+			    {
+			        tanggal: '2026-03-05',
+			        jenis: 'pendapatan-simple',
+			        keterangan: 'SMK Muhammadiyah — Pelatihan Robotik',
+			        jumlah: 1500000
+			    },
+			    {
+			        tanggal: '2026-03-10',
+			        jenis: 'pengeluaran-ppn',
+			        keterangan: 'Pembelian Kabel UTP Cat6',
+			        jumlah: 800000
+			    },
+			    {
+			        tanggal: '2026-03-10',
+			        jenis: 'pengeluaran-simple',
+			        keterangan: 'Konsumsi Rapat Bulanan',
+			        jumlah: 250000
+			    },
+			    {
+			        tanggal: '2026-02-20',
+			        jenis: 'pendapatan-ppn',
+			        keterangan: 'PT. Maju Bersama — Produk IoT',
+			        jumlah: 12000000
+			    },
+				];
+
+		var filterJenisAktif = 'semua';
+		var halamanAktif = 1;
+		var JumlahPerHalaman = 10;
+
+		function renderTabel(dataYangDitampilkan) {
+			var tbody = document.getElementById('isi-tabel')
+			var pesanKosong = document.getElementById('pesan-kosong');
+
+			tbody.innerHTML = '';
+
+			if (dataYangDitampilkan.length === 0) {
+				pesanKosong.style.display = 'block';
+				document.getElementById('pagination').innerHTML = '';
+				return;
+			}
+
+			var totalHalaman = Math.ceil(dataYangDitampilkan.length / JumlahPerHalaman);
+			if (halamanAktif > totalHalaman) halamanAktif = 1;
+
+			var mulaiDari = (halamanAktif - 1) * JumlahPerHalaman;
+			var sampai = mulaiDari + JumlahPerHalaman
+			var dataHalaman = dataYangDitampilkan.slice(mulaiDari, sampai);
+
+			for (var i = 0; i < dataHalaman.length; i++) {
+				var item = dataHalaman[i]
+
+				var bagianTanggal = item.tanggal.split('-');
+				var tanggalRapi = bagianTanggal[2] + '/' + bagianTanggal [1] + '/' + bagianTanggal[0]
+
+				var labelJenis = {
+					'pendapatan-ppn': 'Pendaptan + PPn',
+					'pendapatan-simple': 'Pendapatan',
+					'pengeluaran-ppn': 'Pengeluaran + PPn',
+					'pengeluaran-simple': 'Pengeluaran'
+				};
+
+				var warnaJumlah = item.jenis.includes('pendapatan') ? '#0F6E56' : '#a32d2d';
+				var simbolJumlah = item.jenis.includes('pendapatan') ? '+' : '-';
+
+				var baris = '<tr style="border-bottom:1px solid #f0f0f0;">'
+				    + '<td style="padding:10px 12px; color:#888;">' + tanggalRapi + '</td>'
+            		+ '<td style="padding:10px 12px;">' + (labelJenis[item.jenis] || item.jenis) + '</td>'
+           			+ '<td style="padding:10px 12px;">' + item.keterangan + '</td>'
+            		+ '<td style="padding:10px 12px; text-align:right; font-weight:600; color:' + warnaJumlah + ';">'
+            		+   simbolJumlah + ' Rp ' + item.jumlah.toLocaleString('id-ID')
+            		+ '</td>'
+            		+ '</tr>';
+            	tbody.innerHTML += baris;
+			}
+
+			renderPagination(totalHalaman, dataYangDitampilkan);
+		}
+
+	function buatTombolFilter() {
+    var container = document.getElementById('filter-jenis');
+
+    var tombolList = [
+        { value: 'semua',            label: 'Semua' },
+        { value: 'pendapatan-ppn',   label: 'Pendapatan + PPn' },
+        { value: 'pendapatan-simple',label: 'Pendapatan' },
+        { value: 'pengeluaran-ppn',  label: 'Pengeluaran + PPn' },
+        { value: 'pengeluaran-simple',label: 'Pengeluaran' },
+    ];
+
+    container.innerHTML = ''
+
+    for (var i = 0; i < tombolList.length; i++) {
+        var t = tombolList[i];
+
+        var btn = document.createElement('button');
+        btn.textContent = t.label;
+        btn.setAttribute('data-jenis', t.value);
+
+        btn.style.cssText = 'padding:6px 14px; border:1px solid #ccc; border-radius:8px; '
+            + 'background:#fff; font-size:13px; cursor:pointer;';
+
+        if (t.value === 'semua') {
+            btn.style.background = '#0F6E56';
+            btn.style.color = '#fff';
+            btn.style.borderColor = '#0F6E56';
+        }
+
+        btn.onclick = function() {
+            filterJenisAktif = this.getAttribute('data-jenis');
+            halamanAktif = 1
+
+            var semuaTombol = document.querySelectorAll('#filter-jenis button');
+            for (var j = 0; j < semuaTombol.length; j++) {
+                semuaTombol[j].style.background = '#fff';
+                semuaTombol[j].style.color = '#1a1a18';
+                semuaTombol[j].style.borderColor = '#ccc';
+            }
+            this.style.background = '#0F6E56';
+            this.style.color = '#fff';
+            this.style.borderColor = '#0F6E56';
+
+            terapkanFilter(); 
+        };
+
+        container.appendChild(btn);
+    		}
+			}
+
+	// ============================================================
+// ISI DROPDOWN HARI DAN TAHUN SECARA OTOMATIS
+// ============================================================
+function isiDropdownTanggal() {
+
+    // Isi dropdown Hari: angka 1 sampai 31
+    var selectHari = document.getElementById('filter-hari');
+    for (var h = 1; h <= 31; h++) {
+        var opt = document.createElement('option');
+        opt.value = h;                                    // nilai yang diproses JS
+        opt.textContent = h < 10 ? '0' + h : '' + h;    // tampilan: 01, 02, ... 31
+        selectHari.appendChild(opt);
+    }
+
+    // Isi dropdown Tahun: 3 tahun ke belakang sampai tahun sekarang
+    var selectTahun = document.getElementById('filter-tahun');
+    var tahunSekarang = new Date().getFullYear();
+    for (var t = tahunSekarang - 2; t <= tahunSekarang; t++) {
+        var optT = document.createElement('option');
+        optT.value = t;
+        optT.textContent = t;
+        selectTahun.appendChild(optT);
+    }
+}
+
+
+function terapkanFilter() {
+    halamanAktif = 1; 
+	    var hari   = document.getElementById('filter-hari').value;   
+	    var bulan  = document.getElementById('filter-bulan').value;  
+	    var tahun  = document.getElementById('filter-tahun').value;   
+
+    	var hasilFilter = dataTransaksi.filter(function(item) {
+
+        if (filterJenisAktif !== 'semua' && item.jenis !== filterJenisAktif) {
+            return false; 
+        }
+
+        var bagian = item.tanggal.split('-');
+        var tTahun = parseInt(bagian[0]);
+        var tBulan = parseInt(bagian[1]);
+        var tHari  = parseInt(bagian[2]);
+
+        if (tahun !== '' && tTahun !== parseInt(tahun)) return false;
+        if (bulan !== '' && tBulan !== parseInt(bulan)) return false;
+        if (hari  !== '' && tHari  !== parseInt(hari))  return false;
+
+        return true; 
+    		});
+
+    		renderTabel(hasilFilter); 
+			}
+
+		function resetFilter() {
+		    document.getElementById('filter-hari').value  = '';
+		    document.getElementById('filter-bulan').value = '';
+		    document.getElementById('filter-tahun').value = '';
+		    filterJenisAktif = 'semua';
+
+	    var semuaTombol = document.querySelectorAll('#filter-jenis button');
+	    for (var i = 0; i < semuaTombol.length; i++) {
+	        semuaTombol[i].style.background = '#fff';
+	        semuaTombol[i].style.color = '#1a1a18';
+	        semuaTombol[i].style.borderColor = '#ccc';
+    		}
+	    if (semuaTombol[0]) { 
+	        semuaTombol[0].style.background = '#0F6E56';
+	        semuaTombol[0].style.color = '#fff';
+	        semuaTombol[0].style.borderColor = '#0F6E56';
+   			 }
+
+    		halamanAktif = 1;
+    		terapkanFilter();
+			}
+
+
+	function renderPagination(totalHalaman, dataLengkap) {
+    	var container = document.getElementById('pagination');
+    	container.innerHTML = ''
+
+    	if (totalHalaman <= 1) return;
+
+    	function buatTombol(label, halamanTujuan, nonaktif) {
+        	var btn = document.createElement('button');
+        	btn.textContent = label;
+
+        	btn.style.cssText = 'padding:6px 12px; border:1px solid #ccc; border-radius:8px; '
+            + 'background:#fff; font-size:13px; cursor:pointer; min-width:36px;';
+
+        	if (halamanTujuan === halamanAktif && !nonaktif) {
+	            btn.style.background = '#0F6E56';
+	            btn.style.color = '#fff';
+	            btn.style.borderColor = '#0F6E56';
+        	}
+
+        	if (nonaktif) {
+	            btn.style.cursor = 'default';
+	            btn.style.color = '#888';
+	        } else {
+            btn.onclick = function() {
+                halamanAktif = halamanTujuan;
+                renderTabel(dataLengkap); 
+            };
+        }
+
+        container.appendChild(btn);
+    	}
+
+    		var btnPrev = document.createElement('button');
+    		btnPrev.textContent = '‹';
+    		btnPrev.style.cssText = 'padding:6px 12px; border:1px solid #ccc; border-radius:8px; '
+     	   		+ 'background:#fff; font-size:13px; cursor:pointer;';
+    		if (halamanAktif === 1) {
+        		btnPrev.style.opacity = '0.4';
+        		btnPrev.style.cursor = 'default';
+    			} else {
+        			btnPrev.onclick = function() {
+            		halamanAktif--;
+            		renderTabel(dataLengkap);
+        			};
+    			}
+    container.appendChild(btnPrev);
+
+
+		    for (var p = 1; p <= totalHalaman; p++) {
+		        buatTombol(p, p, false);
+		    }
+
+
+		    var btnNext = document.createElement('button');
+		    btnNext.textContent = '›';
+		    btnNext.style.cssText = 'padding:6px 12px; border:1px solid #ccc; border-radius:8px; '
+		        + 'background:#fff; font-size:13px; cursor:pointer;';
+		    if (halamanAktif === totalHalaman) {
+		        btnNext.style.opacity = '0.4';
+		        btnNext.style.cursor = 'default';
+		    } else {
+		        btnNext.onclick = function() {
+		            halamanAktif++;
+		            renderTabel(dataLengkap);
+		        };
+			    }
+			    container.appendChild(btnNext);
+			}
+
+
 		function bukaTab(namTab) {
 			var semuaSection = document.querySelectorAll('.section');
 			for (var i = 0; i < semuaSection.length; i++) {
@@ -204,6 +743,11 @@
 			document.getElementById('section-' + namTab).classList.add('aktif');
 
 			event.target.classList.add('aktif')
+			if (namTab === 'transaksi'){
+				buatTombolFilter();
+				isiDropdownTanggal();
+				terapkanFilter();
+			}
 		}
 
 		function gantiForm() {
@@ -215,7 +759,6 @@
 			document.getElementById('form-pengeluaran-simple').style.display = 'none';
 
 			document.getElementById('form-' + pilihan).style.display = 'block';
-
 
 		}
 
@@ -230,17 +773,103 @@
 			document.getElementById('hasil-total').textContent = 'Rp ' + total.toLocaleString('id-ID')
 		}
 
-		function simpanData() {
+
+		function hitungPengeluaranPPN() {
+			var jumlahpengppn = parseFloat(document.getElementById('keluar-ppn-jumlah').value) || 0
+			var persenpengppn = parseFloat(document.getElementById('keluar-ppn-persen').value) || 0
+
+			var nilaiPPNPeng = jumlahpengppn * persenpengppn / 100;
+			var neto = jumlahpengppn - nilaiPPNPeng
+
+			document.getElementById('keluar-ppn-nilai').textContent='Rp' + nilaiPPNPeng.toLocaleString('id-ID');
+			document.getElementById('keluar-ppn-neto').textContent='Rp' + neto.toLocaleString('id-ID');
+		}
+
+		function simpanPengeluaranPPN() {
+			if(!document.getElementById('keluar-ppn-tanggal').value){
+				alert('Tanggal harus diisi!'); return;
+			}
+			if(!document.getElementById('keluar-ppn-kategori').value){
+				alert('Kategori Akun harus diisi!'); return;
+			}
+			if(!document.getElementById('keluar-ppn-nama').value){
+				alert('Nama pengeluaran harus diisi!'); return;
+			}
+
+			var jumlah	= parseFloat(document.getElementById('keluar-ppn-jumlah').value) || 0; 
+			if (jumlah <= 0){
+				alert('Jumlah Pengeluaran Harus Diisi!'); return;
+			}
+			alert("Data pengeluaran berhasil disimpan (Sementara")
+		}
+
+		function simpanPengeluaranSimple() {
+		    if (!document.getElementById('keluar-simple-tanggal').value) {
+		        alert('Tanggal harus diisi!'); return;
+		    }
+		    if (!document.getElementById('keluar-simple-kategori').value) {
+		        alert('Kategori akun harus dipilih!'); return;
+		    }
+		    if (!document.getElementById('keluar-simple-nama').value) {
+		        alert('Nama pengeluaran harus diisi!'); return;
+		    }
+		    var jumlah = parseFloat(document.getElementById('keluar-simple-jumlah').value) || 0;
+		    if (jumlah <= 0) {
+		        alert('Jumlah Pengeluaran harus diisi!'); return;
+		    }
+    		alert('Data pengeluaran berhasil disimpan! (Sementara)');
+		}
+
+		function previewFoto(inputID, previwId) {
+			var file=document.getElementById(inputID)
+			var preview = document.getElementById(previwId)
+
+			if (file) {
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					preview.src = e.target.result;
+					preview.style.display = 'block';
+				};
+				reader.readAsDataURL(file);
+			}else {
+				preview.style.display ='none'
+			}
+		}
+
+		function simpanDataPemPPn() {
 			var jumlah = parseFloat(document.getElementById('ppn-jumlah').value) || 0;
 			if (jumlah <= 0) {
 				alert('Jumlah harus diisi!')
 				return;
 			}
-
 			alert('Data berhasil disimpan! (Sementara)')
 
 		}
-		document.querySelector('#navigasi button').click();
+
+		function hitungPemasukkan() {
+			var jumlah = parseFloat(document.getElementById('jumlah-pendapatan').value) || 0;
+			document.getElementById('pendapatan').textContent='Rp' + jumlah.toLocaleString('id-ID')
+
+		}
+
+		function hitungPengeluaranSimple() {
+			var jumlah = parseFloat(document.getElementById('keluar-simple-jumlah').value) || 0;
+			document.getElementById('keluar-simple-total').textContent='Rp' + jumlah.toLocaleString('id-ID')
+
+		}
+
+		function simpanDataPem() {
+			var jumlah = parseFloat(document.getElementById('jumlah-pendapatan').value) || 0
+			if (jumlah <= 0) {
+				alert('Pendapatan harus diisi!')
+				return;
+			}
+			alert('Data berhasil disimpan (Sementara)')
+		}
+
+
+		document.querySelector('#navigasi button').click();gantiForm();
+
 	</script>
 
 
