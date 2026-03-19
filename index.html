@@ -77,6 +77,8 @@
 
 	</style>
 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
 </head>
 
 <body>
@@ -356,56 +358,38 @@
 		<div id="filter-jenis" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom:16px ;">
 		</div>
 
-		<div style="display:flex;gap: 12px;flex-wrap: wrap; margin-bottom: 20px; align-items: center;">
-
-			<label style="font-size: 12px; display: block; margin-bottom:4px;color:#888;">Hari</label>
-			<select id="filter-hari" onchange="terapkanFilter()" 
-			style="padding: 6px 10px; border: 1px solid #ccc; border-radius:8px	; font-size:13px; ">
-			<option value="">Semua Hari</option>
-				
-			</select>
-		</div>
-
-		<div>
-			<label style="font-size: 12px; display: block; margin-bottom:4px;color:#888;">Bulan</label>
-			<select id="filter-bulan" onchange="terapkanFilter()"
-			style="padding:6px; border: 1px solid #ccc;border-radius: 8px; font-size: 13px; ">
-				<option value="">Semua</option>
-				<option value="1">Januari</option>
-				<option value="2">Februari</option>
-				<option value="3">Maret</option>
-				<option value="4">April</option>
-				<option value="5">Mei</option>
-				<option value="6">Juni</option>
-				<option value="7">Juli</option>
-				<option value="8">Agustus</option>
-				<option value="9">September</option>
-				<option value="10">Oktober</option>
-				<option value="11">November</option>
-				<option value="12">Desember</option>
-			</select>
-		</div>
-
-		<div>
-			<label style="font-size:12px; display: block; margin-bottom:4px; color:#888 ;">Tahun</label>
-			<select id="filter-tahun" onchange="terapkanFilter()"
-			style="padding: 6px 10px; border: 1px solid #ccc;border-radius: 8px; font-size:13px ; ">
-			<option value="">Semua</option>
-			</select>
-
-		</div>
-
-		<div style="aligh-self:flex-end">
-			<button onclick="resetFilter()"
-			style="padding:6px; border: 1px solid #ccc;	border-radius: 8px; font-size: 13px; cursor: pointer; background: #fff;">
-				Reset Filter
-			</button>
-		</div>
-
+		<div style="display:block; font-size: 12px; color: #888; margin-bottom: 20px;">
 
 		<div style="overflow-x: auto;">
 			<table id="tabel-transaksi"
 			style="width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; ">
+			<div>
+				<label style="display:block; font-size: 12px; color: #888; margin-bottom:4px;">Tanggal Mulai</label>
+				<div style="position: relative; display: inline-block;">
+					<button id="btn-filter-mulai" onclick="bukaKalenderTransaksi('mulai')"
+					style="padding: 8px 14px; border: 1px solid #ccc; border-radius:8px; background:#fff; font-size: 13px; cursor:pointer; display:flex; align-items:center; gap: 8px; min-width:160px ;  ">
+						🗓️<span id="label-filter-mulai">Pilih Tanggal...</span>
+					</button>
+					<input type="date" id="filter-tanggal-mulai"
+						style="position:absolute; opacity:0; pointer-events:none; width:1px; height: 1px; top: 0; left: 0; ">
+				</div>
+			</div>
+
+			<div>
+				<label style="display:block; font-size: 12px; color: #888; margin-bottom: 4px;">Tanggal Berakhir</label>
+				<div style="position: relative; display: inline-block;">
+					<button id="btn-filter-akhir" onclick="
+						bukaKalenderTransaksi('akhir')"
+						style="padding: 8px 14px; border: 1px solid #ccc;
+						border-radius: 8px; background: #fff; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap:8px; min-width: 160px; ">
+						🗓️<span id="label-filter-akhir">Pilih Tanggal...</span>
+					</button>
+					<input type="date" id="filter-tanggal-akhir"
+						style="position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px; top: 0; left: 0;">
+				</div>
+				
+			</div>
+
 			<thead>
 				<tr style="background: #f5f5f3; text-align: left;">
 					<th style="padding: 10px; border-bottom: 1px solid #e0e0e0; width: 90px;">Tanggal</th>
@@ -431,21 +415,71 @@
 		</div>
 
 	</div>
+	</div>
 
+		<div id="section-preview" class="section">
 
-	<div id="section-preview" class="section">
-		<h2>Preview Laporan</h2>
-		<p>Laporan keuangan akan ditampilkan di sini.</p>
+		  <h2 style="margin-bottom: 8px;">Preview Laporan</h2>
+		  <p style="font-size:13px; color:#888; margin-bottom:24px;">Data diambil dari transaksi yang sudah diinput.</p>
+
+		  <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:32px;">
+		    <div style="background:#f0faf7; border-radius:10px; padding:16px;">
+		      <div style="font-size:12px; color:#888; margin-bottom:4px;">Total Pendapatan</div>
+		      <div id="prev-total-pendapatan" style="font-size:20px; font-weight:600; color:#0F6E56;">Rp 0</div>
+		    </div>
+		    <div style="background:#fff5f5; border-radius:10px; padding:16px;">
+		      <div style="font-size:12px; color:#888; margin-bottom:4px;">Total Pengeluaran</div>
+		      <div id="prev-total-pengeluaran" style="font-size:20px; font-weight:600; color:#a32d2d;">Rp 0</div>
+		    </div>
+		    <div style="background:#f5f5f3; border-radius:10px; padding:16px;">
+		      <div style="font-size:12px; color:#888; margin-bottom:4px;">Laba Bersih</div>
+		      <div id="prev-laba" style="font-size:20px; font-weight:600;">Rp 0</div>
+		    </div>
+		  </div>
+
+		  <div style="margin-bottom:24px;">
+		    <label style="font-size:13px; margin-right:8px;">Tampilkan tren:</label>
+		    <select id="filter-tren" onchange="renderPreview()" style="padding:6px 12px; border:1px solid #ccc; border-radius:8px; font-size:13px;">
+		      <option value="dod">Harian (D-o-D)</option>
+		      <option value="mom" selected>Bulanan (M-o-M)</option>
+		      <option value="yoy">Tahunan (Y-o-Y)</option>
+		    </select>
+		  </div>
+
+		  <div style="background:#fff; border:1px solid #e0e0e0; border-radius:12px; padding:20px; margin-bottom:20px;">
+		    <h3 style="font-size:14px; font-weight:600; margin-bottom:16px;">Tren Pendapatan & Pengeluaran</h3>
+		    <canvas id="chart-tren" height="100"></canvas>
+		  </div>
+
+		  <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px;">
+		    <div style="background:#fff; border:1px solid #e0e0e0; border-radius:12px; padding:20px;">
+		      <h3 style="font-size:14px; font-weight:600; margin-bottom:16px;">Pendapatan per Akun</h3>
+		      <canvas id="chart-akun-pendapatan" height="200"></canvas>
+		    </div>
+		    <div style="background:#fff; border:1px solid #e0e0e0; border-radius:12px; padding:20px;">
+		      <h3 style="font-size:14px; font-weight:600; margin-bottom:16px;">Pengeluaran per Kategori</h3>
+		      <canvas id="chart-akun-pengeluaran" height="200"></canvas>
+		    </div>
+		  </div>
+
+		  <div style="background:#fff; border:1px solid #e0e0e0; border-radius:12px; padding:20px; max-width:400px;">
+		    <h3 style="font-size:14px; font-weight:600; margin-bottom:16px;">Komposisi Pendapatan vs Pengeluaran</h3>
+		    <canvas id="chart-pie" height="200"></canvas>
+		  </div>
 	</div>
 
 	<div id="section-download" class="section">
-		<h2>Download PDF</h2>
-		<p>Fitur download akan dibuat di sini.</p>
+		<h2 style="margin-bottom: 8px;">Download PDF Laporan Keuangan</h2>
+		<p style="font-size: 13px; color: #888; margin-bottom: 24px;">Sedang dalam proses pengembangan - Jimmy Labrador</p>
 	</div>
 
 </div>
+	
 
 	<script>
+
+		var dataTersimpan = [];
+
 
 		var dataTransaksi = [
 					{
@@ -522,7 +556,7 @@
 				var baris = '<tr style="border-bottom:1px solid #f0f0f0;">'
 				    + '<td style="padding:10px 12px; color:#888;">' + tanggalRapi + '</td>'
             		+ '<td style="padding:10px 12px;">' + (labelJenis[item.jenis] || item.jenis) + '</td>'
-           			+ '<td style="padding:10px 12px;">' + item.keterangan + '</td>'
+           			+ '<td style="padding:10px 12px;">' + (item.keterangan || item.klien || '-') + '</td>'
             		+ '<td style="padding:10px 12px; text-align:right; font-weight:600; color:' + warnaJumlah + ';">'
             		+   simbolJumlah + ' Rp ' + item.jumlah.toLocaleString('id-ID')
             		+ '</td>'
@@ -572,9 +606,12 @@
                 semuaTombol[j].style.color = '#1a1a18';
                 semuaTombol[j].style.borderColor = '#ccc';
             }
-            this.style.background = '#0F6E56';
-            this.style.color = '#fff';
-            this.style.borderColor = '#0F6E56';
+
+            if (semuaTombol[0]){
+            	semuaTombol[0].style.background = '#0F6E56'
+            	semuaTombol[0].style.color = '#fff'
+            	semuaTombol[0].style.borderColor = '#0F6E56'
+            }
 
             terapkanFilter(); 
         };
@@ -583,80 +620,97 @@
     		}
 			}
 
-	// ============================================================
-// ISI DROPDOWN HARI DAN TAHUN SECARA OTOMATIS
-// ============================================================
-function isiDropdownTanggal() {
 
-    // Isi dropdown Hari: angka 1 sampai 31
-    var selectHari = document.getElementById('filter-hari');
-    for (var h = 1; h <= 31; h++) {
-        var opt = document.createElement('option');
-        opt.value = h;                                    // nilai yang diproses JS
-        opt.textContent = h < 10 ? '0' + h : '' + h;    // tampilan: 01, 02, ... 31
-        selectHari.appendChild(opt);
-    }
+	function terapkanFilter() {
+    	halamanAktif = 1; 
+		   	var mulai = document.getElementById('filter-tanggal-mulai').value;
+		   	var akhir = document.getElementById('filter-tanggal-akhir'). value
 
-    // Isi dropdown Tahun: 3 tahun ke belakang sampai tahun sekarang
-    var selectTahun = document.getElementById('filter-tahun');
-    var tahunSekarang = new Date().getFullYear();
-    for (var t = tahunSekarang - 2; t <= tahunSekarang; t++) {
-        var optT = document.createElement('option');
-        optT.value = t;
-        optT.textContent = t;
-        selectTahun.appendChild(optT);
-    }
-}
+	    	var hasilFilter = dataTransaksi.concat(dataTersimpan).filter(function(item) {
 
+	        if (filterJenisAktif !== 'semua' && item.jenis !== filterJenisAktif) {
+	            return false; 
+	        }
 
-function terapkanFilter() {
-    halamanAktif = 1; 
-	    var hari   = document.getElementById('filter-hari').value;   
-	    var bulan  = document.getElementById('filter-bulan').value;  
-	    var tahun  = document.getElementById('filter-tahun').value;   
+	        if (mulai && item.tanggal < mulai) return false;
+	        if (akhir && item.tanggal > akhir) return false;
 
-    	var hasilFilter = dataTransaksi.filter(function(item) {
+	        	return true;
 
-        if (filterJenisAktif !== 'semua' && item.jenis !== filterJenisAktif) {
-            return false; 
-        }
+	    		});
 
-        var bagian = item.tanggal.split('-');
-        var tTahun = parseInt(bagian[0]);
-        var tBulan = parseInt(bagian[1]);
-        var tHari  = parseInt(bagian[2]);
-
-        if (tahun !== '' && tTahun !== parseInt(tahun)) return false;
-        if (bulan !== '' && tBulan !== parseInt(bulan)) return false;
-        if (hari  !== '' && tHari  !== parseInt(hari))  return false;
-
-        return true; 
-    		});
-
-    		renderTabel(hasilFilter); 
-			}
+	    		renderTabel(hasilFilter); 
+	}
 
 		function resetFilter() {
-		    document.getElementById('filter-hari').value  = '';
-		    document.getElementById('filter-bulan').value = '';
-		    document.getElementById('filter-tahun').value = '';
-		    filterJenisAktif = 'semua';
+		   document.getElementById('filter-tanggal-mulai').valie = '';
+		   document.getElementById('filter-tanggal-akhir').value = '';
 
-	    var semuaTombol = document.querySelectorAll('#filter-jenis button');
-	    for (var i = 0; i < semuaTombol.length; i++) {
-	        semuaTombol[i].style.background = '#fff';
-	        semuaTombol[i].style.color = '#1a1a18';
-	        semuaTombol[i].style.borderColor = '#ccc';
-    		}
-	    if (semuaTombol[0]) { 
-	        semuaTombol[0].style.background = '#0F6E56';
-	        semuaTombol[0].style.color = '#fff';
-	        semuaTombol[0].style.borderColor = '#0F6E56';
-   			 }
+		   document.getElementById('label-filter-mulai').textContent = 'Pilih tanggal...'
+		   document.getElementById('label-filter-akhir').textContent = 'Pilih tanggal...'
 
-    		halamanAktif = 1;
-    		terapkanFilter();
+		   document.getElementById('btn-filter-mulai').style.borderColor = '#ccc'
+		   document.getElementById('btn-filter-mulai').style.background = '#fff'
+		   document.getElementById('btn-filter-akhir').style.borderColor = '#ccc'
+		   document.getElementById('btn-filter-akhir').style.background ='#fff'
+
+		   filterJenisAktif = 'semua';
+		   var semuaTombol = document.querySelectorAll('#filter-jenis button'); 
+		   for (var i=0; i < semuaTombol.length; i++) {
+		   	semuaTombol[i].style.background = '#fff'
+		   	semuaTombol[i].style.color = '#1a1a18'
+		   	semuaTombol[i].style.borderColor
+		   }
+
 			}
+
+
+	function bukaKalenderTransaksi(tipe) {
+		var inputId = tipe === 'mulai' ? 'filter-tanggal-mulai' : 'filter-tanggal-akhir';
+	    var el = document.getElementById(inputId);
+	    el.style.pointerEvents = 'auto';
+	    el.focus();
+	    if (el.showPicker) {
+	        el.showPicker();
+	    } else {
+	        el.click();
+	    }
+	    el.style.pointerEvents = 'none';
+
+	    document.getElementById('filter-tanggal-mulai').addEventListener('change', function() {
+    var val = this.value;
+    var labelEl = document.getElementById('label-filter-mulai');
+    var btnEl   = document.getElementById('btn-filter-mulai');
+    if (val) {
+        var parts = val.split('-');
+        labelEl.textContent    = parts[2] + '/' + parts[1] + '/' + parts[0];
+        btnEl.style.borderColor = '#0F6E56';
+        btnEl.style.background  = '#f0faf7';
+    } else {
+        labelEl.textContent    = 'Pilih tanggal...';
+        btnEl.style.borderColor = '#ccc';
+        btnEl.style.background  = '#fff';
+    }
+    terapkanFilter();
+	});
+
+	document.getElementById('filter-tanggal-akhir').addEventListener('change', function() {
+    var val = this.value;
+    var labelEl = document.getElementById('label-filter-akhir');
+    var btnEl   = document.getElementById('btn-filter-akhir');
+    if (val) {
+        var parts = val.split('-');
+        labelEl.textContent    = parts[2] + '/' + parts[1] + '/' + parts[0];
+        btnEl.style.borderColor = '#0F6E56';
+        btnEl.style.background  = '#f0faf7';
+    } else {
+        labelEl.textContent    = 'Pilih tanggal...';
+        btnEl.style.borderColor = '#ccc';
+        btnEl.style.background  = '#fff';
+    }
+    terapkanFilter();
+	});
+	}
 
 
 	function renderPagination(totalHalaman, dataLengkap) {
@@ -745,7 +799,32 @@ function terapkanFilter() {
 			event.target.classList.add('aktif')
 			if (namTab === 'transaksi'){
 				buatTombolFilter();
-				isiDropdownTanggal();
+				terapkanFilter();
+			}
+		}
+
+		function pindahTab(namTab) {
+			var semuaSection = document.querySelectorAll(' .section');
+			for (var i = 0; i < semuaSection.length; i++) {
+				semuaSection[i].classList.remove('aktif');
+			}
+
+			var semuaTombol = document.querySelectorAll('#navigasi button');
+			for (var i=0; i <semuaTombol.length; i++) {
+				semuaTombol[i].classList.remove('aktif')
+			}
+
+			document.getElementById('section-' + namTab).classList.add('aktif');
+
+			var semuaTombolNav = document.querySelectorAll('#navigasi button');	
+			for (var i = 0; i < semuaTombolNav.length; i++) {
+				if (semuaTombolNav[i].getAttribute('onclick') === "bukaTab('" + namTab + "')") { 
+					semuaTombolNav[i].classList.add('aktif');
+				}
+			}
+
+			if (namTab == 'transaksi') {
+				buatTombolFilter();
 				terapkanFilter();
 			}
 		}
@@ -837,13 +916,43 @@ function terapkanFilter() {
 		}
 
 		function simpanDataPemPPn() {
+			
+			var tanggal = document.getElementById('ppn-tanggal').value;
+			var faktur = document.getElementById('ppn-faktur').value;
+			var klien = document.getElementById('ppn-klien').value;
+			var deskripsi = document.getElementById('ppn-deskripsi-pemasukkan').value;
+			var akun = document.getElementById('ppn-akun').value;
 			var jumlah = parseFloat(document.getElementById('ppn-jumlah').value) || 0;
-			if (jumlah <= 0) {
-				alert('Jumlah harus diisi!')
-				return;
-			}
-			alert('Data berhasil disimpan! (Sementara)')
+			var persen = parseFloat(document.getElementById('ppn-persen').value) || 0;
 
+			if (!tanggal) { alert('Tanggal harus diisi!'); return; }
+			if (!klien) {alert ('Nama klien harus diisi!'); return;}
+			if (!akun) { alert ('Akun pendapatan harus diisi!'); return;}
+			if (jumlah <= 0) { alert('Jumlah harus diisi!'); return;}
+			
+			var nilaiPPN = jumlah * persen / 100;
+			var total = jumlah + nilaiPPN;
+
+			var transaksi = {
+				tanggal : tanggal, 
+				faktur : faktur,
+				klien : klien,
+				deskripsi : deskripsi,
+				akun : akun, 
+				jumlah : jumlah, 
+				persen : persen, 
+				nilaiPPN : nilaiPPN,
+				total : total, 
+				jenis : 'pendapatan-ppn'
+			};
+
+			dataTersimpan.push(transaksi);
+
+			terapkanFilter();
+			pindahTab('transaksi');
+
+
+			alert('Data berhasil disimpan! Total data: ' + dataTersimpan.length + ' transaksi.');
 		}
 
 		function hitungPemasukkan() {
@@ -867,6 +976,211 @@ function terapkanFilter() {
 			alert('Data berhasil disimpan (Sementara)')
 		}
 
+		var chartTren = null;
+		var chartAkunPendapatan = null;
+		var chartAkunPengeluaran = null;
+		var chartPie = null;
+
+		function renderPreview() {
+		  var semua = dataTransaksi.concat(dataTersimpan);
+		  var modeTren = document.getElementById('filter-tren').value;
+
+		  var totalPendapatan = 0;
+		  var totalPengeluaran = 0;
+		  for (var i = 0; i < semua.length; i++) {
+		    if (semua[i].jenis.includes('pendapatan')) {
+		      totalPendapatan += semua[i].jumlah;
+		    } else {
+		      totalPengeluaran += semua[i].jumlah;
+		    }
+		  }
+
+		  var laba = totalPendapatan - totalPengeluaran;
+		  document.getElementById('prev-total-pendapatan').textContent = 'Rp ' + totalPendapatan.toLocaleString('id-ID');
+		  document.getElementById('prev-total-pengeluaran').textContent = 'Rp ' + totalPengeluaran.toLocaleString('id-ID');
+		  var elLaba = document.getElementById('prev-laba');
+		  elLaba.textContent = 'Rp ' + Math.abs(laba).toLocaleString('id-ID');
+		  elLaba.style.color = laba >= 0 ? '#0F6E56' : '#a32d2d';
+
+		  // Grafik 1: Line chart tren
+		  var grupTren = {};
+		  for (var i = 0; i < semua.length; i++) {
+		    var item = semua[i];
+		    var kunci;
+		    if (modeTren === 'dod') {
+		      kunci = item.tanggal;
+		    } else if (modeTren === 'mom') {
+		      kunci = item.tanggal.substring(0, 7);
+		    } else {
+		      kunci = item.tanggal.substring(0, 4);
+		    }
+		    if (!grupTren[kunci]) {
+		      grupTren[kunci] = { pendapatan: 0, pengeluaran: 0 };
+		    }
+		    if (item.jenis.includes('pendapatan')) {
+		      grupTren[kunci].pendapatan += item.jumlah;
+		    } else {
+		      grupTren[kunci].pengeluaran += item.jumlah;
+		    }
+		  }
+
+		  var labelTren = Object.keys(grupTren).sort();
+		  var dataPend  = labelTren.map(function(k) { return grupTren[k].pendapatan; });
+		  var dataPeng  = labelTren.map(function(k) { return grupTren[k].pengeluaran; });
+
+		  if (chartTren) chartTren.destroy();
+		  chartTren = new Chart(document.getElementById('chart-tren'), {
+		    type: 'line',
+		    data: {
+		      labels: labelTren,
+		      datasets: [
+		        {
+		          label: 'Pendapatan',
+		          data: dataPend,
+		          borderColor: '#0F6E56',
+		          backgroundColor: 'rgba(15,110,86,0.1)',
+		          tension: 0.4,
+		          fill: true
+		        },
+		        {
+		          label: 'Pengeluaran',
+		          data: dataPeng,
+		          borderColor: '#a32d2d',
+		          backgroundColor: 'rgba(163,45,45,0.1)',
+		          tension: 0.4,
+		          fill: true
+		        }
+		      ]
+		    },
+		    options: {
+		      responsive: true,
+		      plugins: { legend: { position: 'top' } },
+		      scales: {
+		        y: {
+		          ticks: {
+		            callback: function(value) {
+		              return 'Rp ' + value.toLocaleString('id-ID');
+		            }
+		          }
+		        }
+		      }
+		    }
+		  });
+
+		  // Grafik 2: Bar horizontal pendapatan per akun
+		  var grupAkunPend = {};
+		  for (var i = 0; i < semua.length; i++) {
+		    if (semua[i].jenis.includes('pendapatan')) {
+		      var akun = semua[i].akun || semua[i].keterangan || 'Lainnya';
+		      grupAkunPend[akun] = (grupAkunPend[akun] || 0) + semua[i].jumlah;
+		    }
+		  }
+		  var labelAkunPend = Object.keys(grupAkunPend);
+		  var dataAkunPend  = labelAkunPend.map(function(k) { return grupAkunPend[k]; });
+
+		  if (chartAkunPendapatan) chartAkunPendapatan.destroy();
+		  chartAkunPendapatan = new Chart(document.getElementById('chart-akun-pendapatan'), {
+		    type: 'bar',
+		    data: {
+		      labels: labelAkunPend,
+		      datasets: [{ label: 'Pendapatan', data: dataAkunPend, backgroundColor: 'rgba(15,110,86,0.7)', borderRadius: 6 }]
+		    },
+		    options: {
+		      indexAxis: 'y',
+		      responsive: true,
+		      plugins: { legend: { display: false } },
+		      scales: { x: { ticks: { callback: function(v) { return 'Rp ' + v.toLocaleString('id-ID'); } } } }
+		    }
+		  });
+
+		  // Grafik 3: Bar horizontal pengeluaran per kategori
+		  var grupAkunPeng = {};
+		  for (var i = 0; i < semua.length; i++) {
+		    if (semua[i].jenis.includes('pengeluaran')) {
+		      var kat = semua[i].kategori || semua[i].keterangan || 'Lainnya';
+		      grupAkunPeng[kat] = (grupAkunPeng[kat] || 0) + semua[i].jumlah;
+		    }
+		  }
+		  var labelAkunPeng = Object.keys(grupAkunPeng);
+		  var dataAkunPeng  = labelAkunPeng.map(function(k) { return grupAkunPeng[k]; });
+
+		  if (chartAkunPengeluaran) chartAkunPengeluaran.destroy();
+		  chartAkunPengeluaran = new Chart(document.getElementById('chart-akun-pengeluaran'), {
+		    type: 'bar',
+		    data: {
+		      labels: labelAkunPeng,
+		      datasets: [{ label: 'Pengeluaran', data: dataAkunPeng, backgroundColor: 'rgba(163,45,45,0.7)', borderRadius: 6 }]
+		    },
+		    options: {
+		      indexAxis: 'y',
+		      responsive: true,
+		      plugins: { legend: { display: false } },
+		      scales: { x: { ticks: { callback: function(v) { return 'Rp ' + v.toLocaleString('id-ID'); } } } }
+		    }
+		  });
+
+		  // Grafik 4: Pie chart
+		  if (chartPie) chartPie.destroy();
+		  chartPie = new Chart(document.getElementById('chart-pie'), {
+		    type: 'pie',
+		    data: {
+		      labels: ['Pendapatan', 'Pengeluaran'],
+		      datasets: [{
+		        data: [totalPendapatan, totalPengeluaran],
+		        backgroundColor: ['rgba(15,110,86,0.8)', 'rgba(163,45,45,0.8)'],
+		        borderWidth: 2
+		      }]
+		    },
+		    options: {
+		      responsive: true,
+		      plugins: {
+		        legend: { position: 'bottom' },
+		        tooltip: {
+		          callbacks: {
+		            label: function(context) {
+		              return ' Rp ' + context.raw.toLocaleString('id-ID');
+		            }
+		          }
+		        }
+		      }
+		    }
+		  });
+		}
+
+		function bukaTab(namTab) {
+		  var semuaSection = document.querySelectorAll('.section');
+		  for (var i = 0; i < semuaSection.length; i++) {
+		    semuaSection[i].classList.remove('aktif');
+		  }
+		  var semuaTombol = document.querySelectorAll('#navigasi button');
+		  for (var i = 0; i < semuaTombol.length; i++) {
+		    semuaTombol[i].classList.remove('aktif');
+		  }
+		  document.getElementById('section-' + namTab).classList.add('aktif');
+		  event.target.classList.add('aktif');
+		  if (namTab === 'transaksi') { buatTombolFilter(); terapkanFilter(); }
+		  if (namTab === 'preview') { renderPreview(); }
+		}
+
+		function pindahTab(namTab) {
+		  var semuaSection = document.querySelectorAll('.section');
+		  for (var i = 0; i < semuaSection.length; i++) {
+		    semuaSection[i].classList.remove('aktif');
+		  }
+		  var semuaTombol = document.querySelectorAll('#navigasi button');
+		  for (var i = 0; i < semuaTombol.length; i++) {
+		    semuaTombol[i].classList.remove('aktif');
+		    if (semuaTombol[i].getAttribute('onclick') === "bukaTab('" + namTab + "')") {
+		      semuaTombol[i].classList.add('aktif');
+		    }
+		  }
+		  document.getElementById('section-' + namTab).classList.add('aktif');
+		  if (namTab === 'transaksi') { buatTombolFilter(); terapkanFilter(); }
+		  if (namTab === 'preview') { renderPreview(); }
+		}
+
+document.querySelector('#navigasi button').click();
+gantiForm();
 
 		document.querySelector('#navigasi button').click();gantiForm();
 
